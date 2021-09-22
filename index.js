@@ -10,17 +10,23 @@ const main = async () => {
   await page.goto(PAGE_URL);
 
   const items = await page.evaluate(() => {
-    // write your querySelectors here
+    const parentArticleSelector = "article#detail-description-container";
+    const descriptionElement = document.querySelector(`${parentArticleSelector} div#description`);
+
+    const description = descriptionElement.innerText;
+    const title = descriptionElement.previousElementSibling.innerText; // The H2 above the description
+    const price = document.querySelector(`${parentArticleSelector} div.price`).innerText;
+    const address = document.querySelector(`${parentArticleSelector} div.address`).innerText;
 
     return {
-      description: "",
-      title: "",
-      price: "",
-      address: "",
+      description: description,
+      title: title,
+      price: price,
+      address: address,
     };
   });
 
-  console.log(items);
+  browser.close();
 
   return items;
 };
