@@ -1,4 +1,6 @@
 const puppeteer = require("puppeteer");
+const sanitizeHtml = require("sanitize-html");
+const fs = require("fs");
 
 const PAGE_URL =
   "https://www.hansimmo.be/appartement-te-koop-in-borgerhout/10161";
@@ -9,14 +11,17 @@ const main = async () => {
 
   await page.goto(PAGE_URL);
 
-  const items = await page.evaluate(() => {
+  const item = await page.evaluate(() => {
     const parentArticleSelector = "article#detail-description-container";
-    const descriptionElement = document.querySelector(`${parentArticleSelector} div#description`);
+    const descriptionElement =
+      document.querySelector(`${parentArticleSelector} div#description`);
 
     const description = descriptionElement.innerText;
-    const title = descriptionElement.previousElementSibling.innerText; // The H2 above the description
-    const price = document.querySelector(`${parentArticleSelector} div.price`).innerText;
-    const address = document.querySelector(`${parentArticleSelector} div.address`).innerText;
+    const title = descriptionElement.previousElementSibling.innerText;
+    const price = document.querySelector(
+      `${parentArticleSelector} div.price`).innerText;
+    const address = document.querySelector(
+      `${parentArticleSelector} div.address`).innerText;
 
     return {
       description: description,
@@ -27,8 +32,10 @@ const main = async () => {
   });
 
   browser.close();
+  item.description = sanitizeHtml(item.description);
 
-  return items;
+  return item;
 };
 
-main().then((data) => console.log(data));
+main().then((data) =>
+  fs.writeFileSync("result.json", JSON.stringify(data)));
