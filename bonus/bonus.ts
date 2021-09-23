@@ -1,5 +1,5 @@
-import * as puppeteer from "./node_modules/puppeteer";
-import * as sanitizeHtml from "./node_modules/sanitize-html";
+import * as puppeteer from "../node_modules/puppeteer";
+import * as sanitizeHtml from "../node_modules/sanitize-html";
 import * as fs from "fs";
 
 const PAGE_URL =
