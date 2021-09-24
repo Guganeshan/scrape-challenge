@@ -10,26 +10,27 @@ const main = async () => {
   const page = await browser.newPage();
   
   await page.goto(PAGE_URL);
+  
+  // Handle of the main article section where the description,
+  // title, price & address exist
+  const articleHandle$ = await page.$("article#detail-description-container");
 
-  const item = await page.evaluate(() => {
-    const parentArticleSelector = "article#detail-description-container";
-    const descriptionElement =
-      document.querySelector(`${parentArticleSelector} div#description`);
-
+  const item = await articleHandle$.evaluate(article => {
+    const descriptionElement = article.querySelector("div#description");
+    
     const description = descriptionElement.textContent;
     const title = descriptionElement.previousElementSibling.textContent;
-    const price = document.querySelector(
-      `${parentArticleSelector} div.price`).textContent;
-    const address = document.querySelector(
-      `${parentArticleSelector} div.address`).textContent;
+    const price = article.querySelector("div.price").textContent;
+    const address = article.querySelector("div.address").textContent;
 
     return {
       description: description,
       title: title,
       price: price,
-      address: address,
+      address: address
     };
-  });
+
+  }, articleHandle$);
 
   browser.close();
   item.description = sanitizeHtml(item.description);
