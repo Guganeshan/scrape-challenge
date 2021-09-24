@@ -1,3 +1,9 @@
+### Note:
+- Typescript version is under the "bonus" folder
+- Sanitization of description is done in both versions though
+
+### ORIGINAL TEXT ->
+
 Clone this project and create a new repo, please don't use a fork otherwise other candidates will be able to see your result. 
 
 ### Main Task
